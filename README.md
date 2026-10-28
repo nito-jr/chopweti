@@ -1,5 +1,7 @@
 # ChopWeti
 
+**Live beta:** https://chopweti-beta.onrender.com
+
 **“Chop weti?”** — the daily question, answered for a Bamenda kitchen.
 
 ChopWeti is a mobile-first product prototype built from the brief: household-aware meal
@@ -25,7 +27,21 @@ npm run preview
 The app is a Vite + React + TypeScript single-page app using hash routing, so the built
 `dist/` folder can be served from any static host without route rewrites.
 
-### Open it on a phone on the same Wi-Fi
+### Deploy on Render
+
+The beta is deployed as a Render Static Site from
+[`nito-jr/chopweti`](https://github.com/nito-jr/chopweti):
+
+- **URL:** https://chopweti-beta.onrender.com
+- **Build command:** `npm ci && npm run build`
+- **Publish directory:** `dist`
+- **Blueprint:** [`render.yaml`](render.yaml)
+
+Pushing to `main` triggers a new deploy. The repository is currently public so Render can
+fetch it without a private GitHub connection. Add `chopweti.cmspnw.org` as a custom domain
+in Render when the DNS record is ready.
+
+## Open it on a phone on the same Wi-Fi
 
 Both `npm run dev` and `npm run preview` bind to `0.0.0.0`, so they are reachable from the
 local network. Find the computer's LAN IPv4 address and open the same port on the phone:
