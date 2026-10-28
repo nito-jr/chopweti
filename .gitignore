@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.tmp/
+.screenshots/
+*.local
+.render-api-key
+.github-token
+.DS_Store

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ChopWeti — product film</title>
+<style>
+@font-face{font-family:'Fraunces';src:url('/public/fonts/fraunces-normal-300900.woff2') format('woff2');font-weight:300 900;font-style:normal;font-display:block}
+@font-face{font-family:'Fraunces';src:url('/public/fonts/fraunces-italic-300900.woff2') format('woff2');font-weight:300 900;font-style:italic;font-display:block}
+@font-face{font-family:'Manrope';src:url('/public/fonts/manrope-normal-400800.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:block}
+
+:root{
+  --ink:#16271d;
+  --forest:#14271b;
+  --forest-deep:#0f1d14;
+  --cream:#f4eddf;
+  --paper:#fbf7ee;
+  --clay:#b5452f;
+  --gold:#d8a332;
+  --cobalt:#2457a6;
+  --muted:#747866;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--forest-deep)}
+body{font-family:'Manrope',sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased}
+img{display:block}
+.stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:var(--forest-deep)}
+.grain{position:absolute;inset:0;z-index:90;pointer-events:none;opacity:.065;background-image:url('assets/noise.png');background-size:420px;mix-blend-mode:screen}
+.vignette{position:absolute;inset:0;z-index:80;pointer-events:none;box-shadow:inset 0 0 220px rgba(0,0,0,.45)}
+.scene{position:absolute;inset:0;visibility:hidden;opacity:0;overflow:hidden}
+.scene-bg{position:absolute;inset:0}
+
+.kicker{font-size:15px;font-weight:800;letter-spacing:.22em;text-transform:uppercase}
+.kicker .num{color:var(--clay);margin-right:14px}
+.serif{font-family:'Fraunces',serif;font-weight:460;letter-spacing:-.055em;line-height:.92}
+.serif em{font-weight:360;font-style:italic}
+.rule{width:76px;height:2px;background:currentColor;opacity:.45}
+.mono{font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:3px;font-size:14px;font-weight:750;line-height:1}
+.chip svg{width:15px;height:15px}
+
+/* cold open */
+.cold .scene-bg{background:
+  radial-gradient(circle at 74% 29%, rgba(36,87,166,.24), transparent 31%),
+  radial-gradient(circle at 18% 102%, rgba(181,69,47,.18), transparent 35%),
+  var(--forest-deep)}
+.cold-ring{position:absolute;width:920px;height:920px;border:1px solid rgba(244,237,223,.10);border-radius:50%;right:-130px;top:80px}
+.cold-ring.two{width:1200px;height:1200px;right:-230px;top:-60px;opacity:.5}
+.film-meta{position:absolute;top:56px;left:88px;display:flex;align-items:center;gap:18px;color:rgba(244,237,223,.46);font-size:12px;font-weight:750;letter-spacing:.18em;text-transform:uppercase}
+.film-meta .dot{width:6px;height:6px;background:var(--gold);border-radius:1px;transform:rotate(45deg)}
+.cold-center{position:absolute;left:88px;top:242px;width:1180px}
+.pot{width:116px;height:116px;color:var(--gold);transform:rotate(-4deg)}
+.cold .kicker{margin-top:28px;color:rgba(244,237,223,.52)}
+.cold h1{font-family:'Fraunces',serif;font-size:228px;letter-spacing:-.085em;line-height:.77;margin:26px 0 0;font-weight:470}
+.cold h1 em{color:var(--clay);font-weight:340}
+.cold-lede{width:560px;margin:38px 0 0 8px;color:rgba(244,237,223,.58);font-family:'Fraunces',serif;font-size:31px;line-height:1.25;font-style:italic;letter-spacing:-.025em}
+.cold-foot{position:absolute;left:90px;bottom:52px;color:rgba(244,237,223,.35);font-size:11px;font-weight:750;letter-spacing:.18em;text-transform:uppercase}
+.open-mark{position:absolute;right:122px;bottom:92px;width:420px;border-top:1px solid rgba(244,237,223,.18);padding-top:18px;color:rgba(244,237,223,.45);font-size:12px;line-height:1.6;text-align:right;letter-spacing:.08em;text-transform:uppercase}
+
+/* problem */
+.problem .scene-bg{background:var(--cream)}
+.problem-copy{position:absolute;left:92px;top:173px;width:790px;color:var(--ink)}
+.problem-copy .kicker{color:#5c6658}
+.problem-copy .kicker .num{color:var(--clay)}
+.problem h2{font-family:'Fraunces',serif;font-size:92px;line-height:.94;letter-spacing:-.062em;font-weight:470;margin:34px 0 0}
+.problem h2 em{color:var(--clay);font-weight:350}
+.problem-body{width:600px;margin-top:31px;color:#626b5c;font-size:21px;line-height:1.55}
+.problem-body strong{color:var(--ink);font-weight:750}
+.problem-bottom{position:absolute;left:94px;bottom:66px;display:flex;align-items:center;gap:27px;color:#737a6c;font-size:13px;font-weight:700;letter-spacing:.02em}
+.problem-bottom .square{width:9px;height:9px;background:var(--clay);transform:rotate(45deg)}
+.problem-photo{position:absolute;right:77px;top:91px;width:812px;height:874px;overflow:hidden;border-radius:2px;box-shadow:26px 32px 0 rgba(20,39,27,.09)}
+.problem-photo img{width:100%;height:100%;object-fit:cover}
+.problem-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 52%,rgba(15,27,19,.68))}
+.photo-label{position:absolute;left:26px;bottom:24px;z-index:2;color:var(--cream);font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.photo-note{position:absolute;right:26px;bottom:24px;z-index:2;color:rgba(244,237,223,.58);font-family:'Fraunces',serif;font-size:20px;font-style:italic}
+
+/* table */
+.table .scene-bg{background:#f2ebde}
+.table-screen{position:absolute;left:84px;top:143px;width:990px;transform:rotate(-1.7deg)}
+.browser{border:1px solid rgba(22,39,29,.25);border-radius:10px;overflow:hidden;background:var(--paper);box-shadow:0 45px 90px rgba(20,39,27,.22)}
+.browser-top{height:30px;display:flex;align-items:center;gap:6px;background:#e9e1d2;padding:0 13px;border-bottom:1px solid rgba(22,39,29,.12)}
+.browser-top i{width:7px;height:7px;border-radius:50%;background:#c7bdac}
+.browser-top span{margin-left:9px;font-size:10px;font-weight:750;letter-spacing:.08em;color:#8d9184}
+.browser img{width:100%;display:block}
+.table-copy{position:absolute;right:93px;top:209px;width:670px;color:var(--ink)}
+.table-copy .kicker{color:#707868}
+.table-copy h2{font-family:'Fraunces',serif;font-size:84px;line-height:.94;letter-spacing:-.06em;font-weight:470;margin:28px 0 0}
+.table-copy h2 em{color:var(--clay);font-weight:350}
+.table-copy p{width:530px;margin-top:26px;color:#687061;font-size:20px;line-height:1.55}
+.table-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;width:550px}
+.table-chips .chip{border:1px solid rgba(22,39,29,.17);background:rgba(255,253,248,.48);color:#465541}
+.table-callout{position:absolute;right:96px;bottom:85px;display:flex;align-items:center;gap:16px;color:#6f7768;font-size:13px;font-weight:700}
+.table-callout b{font-family:'Fraunces',serif;font-size:42px;font-weight:400;color:var(--clay);letter-spacing:-.04em}
+.table-foot{position:absolute;left:91px;bottom:64px;display:flex;align-items:center;gap:13px;color:#7b8174;font-size:12px;font-weight:750;letter-spacing:.03em}
+.table-foot .square{width:8px;height:8px;background:var(--cobalt);transform:rotate(45deg)}
+
+/* tonight */
+.tonight .scene-bg{background:
+  radial-gradient(circle at 84% 70%, rgba(181,69,47,.16), transparent 35%),
+  var(--forest)}
+.tonight-copy{position:absolute;left:90px;top:133px;width:610px}
+.tonight .kicker{color:rgba(244,237,223,.48)}
+.tonight-copy h2{font-family:'Fraunces',serif;font-size:83px;line-height:.92;letter-spacing:-.06em;font-weight:460;margin:30px 0 0}
+.tonight-copy h2 em{color:var(--gold);font-weight:350}
+.tonight-copy p{margin-top:28px;color:rgba(244,237,223,.59);font-size:20px;line-height:1.6;width:470px}
+.tonight-screen{position:absolute;right:55px;top:206px;width:1120px;transform:rotate(1.2deg)}
+.tonight-screen .browser{box-shadow:0 55px 100px rgba(0,0,0,.4)}
+.tonight-screen .browser-top{background:#dcd5c6}
+.float-note{position:absolute;z-index:4;display:flex;align-items:center;gap:8px;padding:12px 15px;border-radius:4px;font-size:12px;font-weight:750;letter-spacing:.02em;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.note-table{right:33px;top:131px;background:var(--paper);color:var(--ink);border:1px solid rgba(22,39,29,.2)}
+.note-table .dot{width:6px;height:6px;border-radius:50%;background:var(--cobalt)}
+.note-pantry{right:815px;bottom:81px;background:var(--gold);color:#2e2a17}
+.note-pantry strong{font-size:17px;font-family:'Fraunces',serif;font-weight:500}
+
+/* recipe */
+.recipe .scene-bg{background:var(--paper)}
+.recipe-copy{position:absolute;left:92px;top:183px;width:580px;color:var(--ink)}
+.recipe .kicker{color:#707868}
+.recipe-copy h2{font-family:'Fraunces',serif;font-size:81px;line-height:.93;letter-spacing:-.06em;font-weight:470;margin:30px 0 0}
+.recipe-copy h2 em{color:var(--clay);font-weight:350}
+.recipe-list{display:flex;flex-direction:column;gap:17px;margin-top:35px}
+.recipe-list div{display:flex;align-items:flex-start;gap:12px;color:#5e685a;font-size:17px;line-height:1.4}
+.recipe-list svg{flex:0 0 auto;width:18px;height:18px;margin-top:1px;color:var(--clay)}
+.recipe-screen{position:absolute;right:65px;top:109px;width:1090px;transform:rotate(1.4deg)}
+.recipe-screen .browser{box-shadow:0 48px 90px rgba(20,39,27,.18)}
+.recipe-stamp{position:absolute;right:849px;bottom:67px;z-index:4;display:flex;align-items:center;gap:12px;padding:15px 18px;background:var(--cobalt);color:#fff;box-shadow:0 14px 34px rgba(36,87,166,.28);border-radius:3px}
+.recipe-stamp .tick{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18)}
+.recipe-stamp strong{display:block;font-size:13px;line-height:1.1}
+.recipe-stamp span{display:block;margin-top:4px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.recipe-foot{position:absolute;left:92px;bottom:68px;display:flex;align-items:center;gap:13px;color:#7b8174;font-size:12px;font-weight:750;letter-spacing:.04em}
+.recipe-foot .square{width:8px;height:8px;background:var(--clay);transform:rotate(45deg)}
+.recipe-quote{position:absolute;left:92px;bottom:134px;width:520px;color:#626b5c;font-family:'Fraunces',serif;font-size:27px;font-style:italic;line-height:1.35;letter-spacing:-.025em}
+
+/* vendor */
+.vendor .scene-bg{background:var(--forest-deep)}
+.vendor-photo{position:absolute;left:0;top:0;width:735px;height:1080px;overflow:hidden}
+.vendor-photo img{width:100%;height:100%;object-fit:cover}
+.vendor-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,29,20,.05) 20%,rgba(15,29,20,.72) 100%),linear-gradient(0deg,rgba(15,29,20,.65),transparent 45%)}
+.vendor-copy{position:absolute;left:817px;top:151px;width:920px}
+.vendor .kicker{color:rgba(244,237,223,.46)}
+.vendor-copy h2{font-family:'Fraunces',serif;font-size:88px;line-height:.9;letter-spacing:-.065em;font-weight:460;margin:31px 0 0}
+.vendor-copy h2 em{color:var(--gold);font-weight:350}
+.vendor-copy p{width:610px;margin-top:28px;color:rgba(244,237,223,.58);font-size:20px;line-height:1.6}
+.vendor-stat{display:flex;align-items:flex-end;gap:17px;margin-top:39px;padding-top:17px;border-top:1px solid rgba(244,237,223,.16);width:610px}
+.vendor-stat b{font-family:'Fraunces',serif;font-size:52px;font-weight:400;letter-spacing:-.05em;color:var(--cream);line-height:.8}
+.vendor-stat span{font-size:12px;line-height:1.4;color:rgba(244,237,223,.42);text-transform:uppercase;letter-spacing:.1em}
+.vendor-screen{position:absolute;right:56px;bottom:23px;width:640px;transform:rotate(-1.2deg)}
+.vendor-screen .browser{box-shadow:0 35px 70px rgba(0,0,0,.35)}
+.vendor-screen .browser-top{background:#d9d1c1}
+.vendor-tag{position:absolute;left:693px;bottom:82px;z-index:3;padding:11px 14px;background:var(--paper);color:var(--ink);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-left:3px solid var(--cobalt)}
+
+/* trust */
+.trust .scene-bg{background:#efe7d8}
+.trust-copy{position:absolute;left:93px;top:187px;width:600px;color:var(--ink)}
+.trust .kicker{color:#707868}
+.trust-copy h2{font-family:'Fraunces',serif;font-size:80px;line-height:.92;letter-spacing:-.06em;font-weight:470;margin:30px 0 0}
+.trust-copy h2 em{color:var(--clay);font-weight:350}
+.trust-copy p{width:505px;margin-top:28px;color:#626b5c;font-size:19px;line-height:1.6}
+.trust-seal{display:flex;align-items:center;gap:14px;margin-top:31px;padding:14px 16px;border:1px solid rgba(36,87,166,.25);background:rgba(36,87,166,.07);width:fit-content;color:var(--cobalt)}
+.trust-seal svg{width:24px;height:24px}
+.trust-seal strong{display:block;font-size:13px}
+.trust-seal span{display:block;margin-top:4px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+.trust-screen{position:absolute;right:55px;top:156px;width:1130px;transform:rotate(1deg)}
+.trust-screen .browser{box-shadow:0 45px 85px rgba(20,39,27,.2)}
+.trust-screen .browser-top{background:#d9d1c1}
+.trust-quote{position:absolute;right:71px;bottom:70px;z-index:3;width:450px;padding:20px 22px;background:var(--forest);color:var(--cream);border-left:3px solid var(--gold);font-family:'Fraunces',serif;font-size:22px;font-style:italic;line-height:1.3}
+.trust-quote span{display:block;margin-top:9px;font-family:'Manrope',sans-serif;font-size:10px;font-style:normal;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,237,223,.4)}
+
+/* end */
+.end .scene-bg{background:
+  radial-gradient(circle at 50% 45%, rgba(181,69,47,.20), transparent 35%),
+  radial-gradient(circle at 80% 10%, rgba(36,87,166,.18), transparent 32%),
+  var(--forest-deep)}
+.end .pot{position:absolute;top:135px;left:calc(50% - 58px);width:116px;height:116px}
+.end-center{position:absolute;left:0;right:0;top:273px;text-align:center}
+.end .kicker{color:rgba(244,237,223,.43)}
+.end h2{font-family:'Fraunces',serif;font-size:153px;line-height:.8;letter-spacing:-.075em;font-weight:470;margin:26px 0 0}
+.end h2 em{color:var(--clay);font-weight:340}
+.end-sub{font-family:'Fraunces',serif;font-size:39px;font-style:italic;letter-spacing:-.02em;color:var(--gold);margin-top:30px}
+.end-line{width:180px;height:1px;background:rgba(244,237,223,.25);margin:39px auto 25px}
+.end-meta{display:flex;justify-content:center;align-items:center;gap:24px;color:rgba(244,237,223,.46);font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.end-meta .dot{width:5px;height:5px;background:var(--gold);transform:rotate(45deg)}
+.end-foot{position:absolute;left:0;right:0;bottom:43px;text-align:center;color:rgba(244,237,223,.27);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
+
+.progress{position:absolute;left:0;bottom:0;height:3px;background:var(--clay);z-index:100;width:0}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="grain"></div>
+  <div class="vignette"></div>
+  <div class="progress" id="progress"></div>
+
+  <section class="scene cold" data-start="0" data-end="5.2">
+    <div class="scene-bg"></div>
+    <div class="cold-ring"></div><div class="cold-ring two"></div>
+    <div class="film-meta"><span class="dot"></span><span>ChopWeti</span><span>Bamenda, Cameroon</span><span>2026</span></div>
+    <div class="cold-center">
+      <div class="anim" data-in="0.25" data-y="28" data-scale=".9">
+        <svg class="pot" viewBox="0 0 40 40" fill="none" aria-label="ChopWeti pot">
+          <g transform="rotate(-7 20 23)">
+            <path d="M8.2 17.4h23.6l-2.7 13.3c-.3 1.5-1.6 2.5-3.1 2.5H14c-1.5 0-2.8-1-3.1-2.5L8.2 17.4Z" fill="currentColor"/>
+            <path d="M6.6 16.6h26.8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M4.7 20.1c-1.5.9-1.6 3.1-.2 4.2l2.4 1.8M35.3 20.1c1.5.9 1.6 3.1.2 4.2l-2.4 1.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <g transform="rotate(-21 15 13)">
+              <ellipse cx="15" cy="13.2" rx="9.1" ry="2.6" fill="currentColor"/>
+              <path d="M7.2 13c.5-2.8 4-4.4 7.8-4.4s7.3 1.6 7.8 4.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+              <circle cx="15" cy="7.1" r="1.6" fill="currentColor"/>
+            </g>
+            <path d="M24.2 6.9c-1.4-1.5 1.2-2.4.3-4M29 8.1c-1.2-1.4 1-2.2.2-3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="anim" data-in="0.55" data-y="18"><div class="kicker">A kitchen companion from Bamenda</div></div>
+      <h1 class="anim" data-in="0.75" data-y="55">Chop <em>weti?</em></h1>
+      <p class="cold-lede anim" data-in="1.25" data-y="24">The daily answer to what are we eating today — for your table, your pantry, your life.</p>
+    </div>
+    <div class="cold-foot anim" data-in="1.7" data-y="10">A product film · Beta</div>
+    <div class="open-mark anim" data-in="1.55" data-y="10">Food is identity.<br/>Cook it with confidence.</div>
+  </section>
+
+  <section class="scene problem" data-start="5.2" data-end="11.2">
+    <div class="scene-bg"></div>
+    <div class="problem-copy">
+      <div class="kicker anim" data-in=".1"><span class="num">01</span>The daily question</div>
+      <h2 class="anim" data-in=".3" data-y="55">You know the dish.<br/><em>Not the measurements.</em></h2>
+      <p class="problem-body anim" data-in=".8" data-y="30">How much spice? When does the cocoyam go in? The knowledge lived in her hands — not in a book. <strong>So we stay with the same few meals.</strong></p>
+      <div class="problem-bottom anim" data-in="1.25" data-y="18"><span class="square"></span><span>Achu · Ndolé · Eru · Kati-Kati</span><span>·</span><span>Bamenda kitchens</span></div>
+    </div>
+    <div class="problem-photo anim" data-in=".35" data-y="48" data-scale="1.04">
+      <img src="/public/images/market-fruit.jpg" alt="Market produce in Bamenda" />
+      <div class="photo-label">Nkwen market · 12 Oct 2026</div>
+      <div class="photo-note">The food is already here.</div>
+    </div>
+  </section>
+
+  <section class="scene table" data-start="11.2" data-end="19.5">
+    <div class="scene-bg"></div>
+    <div class="table-screen anim" data-in=".25" data-y="65" data-scale=".97" data-drift="12">
+      <div class="browser"><div class="browser-top"><i></i><i></i><i></i><span>chopweti / set your table</span></div><img src="assets/screens/setup-pepper.png" alt="Household setup screen" /></div>
+    </div>
+    <div class="table-copy">
+      <div class="kicker anim" data-in=".25"><span class="num">02</span>Your table</div>
+      <h2 class="anim" data-in=".45" data-y="40">Tell us<br/><em>who’s eating.</em></h2>
+      <p class="anim" data-in=".85" data-y="25">Allergies. Dislikes. Goals. Pantry. Dinner that fits your household — not a magazine family.</p>
+      <div class="table-chips">
+        <span class="chip anim" data-in="1.15" data-y="16">No peanuts</span>
+        <span class="chip anim" data-in="1.28" data-y="16">More protein</span>
+        <span class="chip anim" data-in="1.41" data-y="16">Pepper: medium</span>
+      </div>
+    </div>
+    <div class="table-callout anim" data-in="1.55" data-y="15"><b>4</b><span>people at the table.<br/>Every quantity scales.</span></div>
+    <div class="table-foot anim" data-in="1.75" data-y="12"><span class="square"></span>No account. No email. Everything stays on this device.</div>
+  </section>
+
+  <section class="scene tonight" data-start="19.5" data-end="27.5">
+    <div class="scene-bg"></div>
+    <div class="tonight-copy">
+      <div class="kicker anim" data-in=".1"><span class="num">03</span>Tonight</div>
+      <h2 class="anim" data-in=".3" data-y="45">The daily<br/>question,<br/><em>answered.</em></h2>
+      <p class="anim" data-in=".75" data-y="25">Beans & Dodo. High protein. Four pantry things. A proper pot for four — with a caution, not a surprise.</p>
+    </div>
+    <div class="tonight-screen anim" data-in=".3" data-y="60" data-scale=".98" data-drift="14">
+      <div class="browser"><div class="browser-top"><i></i><i></i><i></i><span>chopweti / today</span></div><img src="assets/screens/today.png" alt="Tonight's recommendation" /></div>
+    </div>
+    <div class="float-note note-table anim" data-in="1.05" data-y="14"><span class="dot"></span>Fits your table</div>
+    <div class="float-note note-pantry anim" data-in="1.3" data-y="18"><strong>4</strong> pantry things used</div>
+  </section>
+
+  <section class="scene recipe" data-start="27.5" data-end="36.5">
+    <div class="scene-bg"></div>
+    <div class="recipe-copy">
+      <div class="kicker anim" data-in=".1"><span class="num">04</span>The cook</div>
+      <h2 class="anim" data-in=".3" data-y="45">A recipe that<br/><em>walks beside you.</em></h2>
+      <div class="recipe-list">
+        <div class="anim" data-in=".8" data-y="17"><svg viewBox="0 0 20 20" fill="none"><path d="m3 10 4.5 4.5L17 4.5" stroke="currentColor" stroke-width="2"/></svg>Ingredients scaled to your table</div>
+        <div class="anim" data-in=".95" data-y="17"><svg viewBox="0 0 20 20" fill="none"><path d="m3 10 4.5 4.5L17 4.5" stroke="currentColor" stroke-width="2"/></svg>Every step, with a kitchen tip</div>
+        <div class="anim" data-in="1.1" data-y="17"><svg viewBox="0 0 20 20" fill="none"><path d="m3 10 4.5 4.5L17 4.5" stroke="currentColor" stroke-width="2"/></svg>A tick when it is actually done</div>
+      </div>
+    </div>
+    <div class="recipe-screen anim" data-in=".3" data-y="55" data-scale=".98" data-drift="12">
+      <div class="browser"><div class="browser-top"><i></i><i></i><i></i><span>chopweti / eru & water fufu</span></div><img src="assets/screens/recipe-steps.png" alt="Guided recipe steps" /></div>
+    </div>
+    <div class="recipe-quote anim" data-in="1.35" data-y="16">“You don’t need to already know how it’s done.”</div>
+    <div class="recipe-stamp anim" data-in="1.25" data-y="16"><span class="tick"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="m3 10 4.5 4.5L17 4.5" stroke="currentColor" stroke-width="2.2"/></svg></span><span><strong>Step 1 done</strong><span>Keep the process clear</span></span></div>
+    <div class="recipe-foot anim" data-in="1.55" data-y="12"><span class="square"></span>Eru & water fufu · 6 steps · 55 minutes · serves 4</div>
+  </section>
+
+  <section class="scene vendor" data-start="36.5" data-end="45">
+    <div class="scene-bg"></div>
+    <div class="vendor-photo anim" data-in=".05" data-y="0" data-scale="1.03"><img src="/public/images/vendor-greens.jpg" alt="Vendor at a roadside market" /></div>
+    <div class="vendor-copy">
+      <div class="kicker anim" data-in=".25"><span class="num">05</span>The hard part</div>
+      <h2 class="anim" data-in=".45" data-y="45">Keep the cooking.<br/><em>Skip the pounding.</em></h2>
+      <p class="anim" data-in=".85" data-y="25">Pounded cocoyam. Cleaned eru. Groundnut paste. Buy the slow work ready from a verified neighbour — or do it yourself.</p>
+      <div class="vendor-stat anim" data-in="1.2" data-y="22"><b>25</b><span>minutes saved<br/>on one pot</span><b>3,500</b><span>FCFA for ready-<br/>pounded cocoyam</span></div>
+    </div>
+    <div class="vendor-screen anim" data-in=".5" data-y="55" data-scale=".98" data-drift="10">
+      <div class="browser"><div class="browser-top"><i></i><i></i><i></i><span>chopweti / shopping list</span></div><img src="assets/screens/list.png" alt="Shopping list with prepared ingredients" /></div>
+    </div>
+    <div class="vendor-tag anim" data-in="1.35" data-y="12">Verified 12 Oct 2026</div>
+  </section>
+
+  <section class="scene trust" data-start="45" data-end="52">
+    <div class="scene-bg"></div>
+    <div class="trust-copy">
+      <div class="kicker anim" data-in=".1"><span class="num">06</span>Verified</div>
+      <h2 class="anim" data-in=".3" data-y="45">Trust is a person<br/><em>on the ground.</em></h2>
+      <p class="anim" data-in=".75" data-y="25">A correspondent visits. A regulator checks. You see the date it was last verified — not a badge that never changes.</p>
+      <div class="trust-seal anim" data-in="1.05" data-y="18"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 20 6v6.2c0 5.2-3.3 8.2-8 9.3-4.7-1.1-8-4.1-8-9.3V6l8-3.5Z" stroke="currentColor" stroke-width="1.7"/><path d="m8 12 2.6 2.6L16.5 9" stroke="currentColor" stroke-width="1.7"/></svg><span><strong>Neba A. · Nkwen</strong><span>Last field check · 12 Oct 2026</span></span></div>
+    </div>
+    <div class="trust-screen anim" data-in=".3" data-y="52" data-scale=".98" data-drift="12">
+      <div class="browser"><div class="browser-top"><i></i><i></i><i></i><span>chopweti / how we verify</span></div><img src="assets/screens/trust.png" alt="Verification process" /></div>
+    </div>
+    <div class="trust-quote anim" data-in="1.25" data-y="18">“If I would not send my own sister to the stall, it does not go on the app.”<span>Neba A. · Correspondent</span></div>
+  </section>
+
+  <section class="scene end" data-start="52" data-end="60">
+    <div class="scene-bg"></div>
+    <svg class="pot anim" data-in=".1" data-y="20" data-scale=".9" viewBox="0 0 40 40" fill="none">
+      <g transform="rotate(-7 20 23)">
+        <path d="M8.2 17.4h23.6l-2.7 13.3c-.3 1.5-1.6 2.5-3.1 2.5H14c-1.5 0-2.8-1-3.1-2.5L8.2 17.4Z" fill="currentColor"/>
+        <path d="M6.6 16.6h26.8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M4.7 20.1c-1.5.9-1.6 3.1-.2 4.2l2.4 1.8M35.3 20.1c1.5.9 1.6 3.1.2 4.2l-2.4 1.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        <g transform="rotate(-21 15 13)"><ellipse cx="15" cy="13.2" rx="9.1" ry="2.6" fill="currentColor"/><path d="M7.2 13c.5-2.8 4-4.4 7.8-4.4s7.3 1.6 7.8 4.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="15" cy="7.1" r="1.6" fill="currentColor"/></g>
+        <path d="M24.2 6.9c-1.4-1.5 1.2-2.4.3-4M29 8.1c-1.2-1.4 1-2.2.2-3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div class="end-center">
+      <div class="kicker anim" data-in=".35">Food is identity</div>
+      <h2 class="anim" data-in=".55" data-y="45">Chop <em>weti?</em></h2>
+      <div class="end-sub anim" data-in=".95" data-y="22">What are we eating today?</div>
+      <div class="end-line anim" data-in="1.1"></div>
+      <div class="end-meta anim" data-in="1.2"><span>Bamenda</span><span class="dot"></span><span>Cameroon</span><span class="dot"></span><span>Beta 2026</span></div>
+    </div>
+    <div class="end-foot anim" data-in="1.45">A kitchen companion from Bamenda · chopweti.cmspnw.org</div>
+  </section>
+</div>
+
+<script>
+const DURATION = 60;
+const scenes = [...document.querySelectorAll('.scene')].map((el) => ({
+  el,
+  start: Number(el.dataset.start),
+  end: Number(el.dataset.end),
+}));
+const anims = [...document.querySelectorAll('.anim')].map((el) => ({
+  el,
+  scene: el.closest('.scene'),
+  in: Number(el.dataset.in || 0),
+  y: Number(el.dataset.y || 0),
+  x: Number(el.dataset.x || 0),
+  scale: el.dataset.scale ? Number(el.dataset.scale) : 1,
+  drift: Number(el.dataset.drift || 0),
+}));
+const ease = (x) => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);
+const clamp = (x) => Math.max(0, Math.min(1, x));
+
+function setTime(t) {
+  document.getElementById('progress').style.width = `${clamp(t / DURATION) * 100}%`;
+  for (const s of scenes) {
+    const fadeIn = clamp((t - s.start) / .62);
+    const fadeOut = clamp((s.end - t) / .62);
+    const op = Math.min(fadeIn, fadeOut);
+    s.el.style.opacity = op;
+    s.el.style.visibility = op > 0 ? 'visible' : 'hidden';
+    s.el.style.zIndex = Math.round(s.start * 10);
+  }
+  for (const a of anims) {
+    const start = Number(a.scene.dataset.start);
+    const end = Number(a.scene.dataset.end);
+    const sceneProgress = clamp((t - start) / Math.max(.001, end - start));
+    const p = ease((t - start - a.in) / 1.15);
+    a.el.style.opacity = p;
+    const x = (1 - p) * a.x;
+    const y = (1 - p) * a.y - a.drift * sceneProgress;
+    const scale = a.scale + (1 - a.scale) * p;
+    a.el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+  }
+}
+
+window.setTime = setTime;
+setTime(0);
+</script>
+</body>
+</html>
